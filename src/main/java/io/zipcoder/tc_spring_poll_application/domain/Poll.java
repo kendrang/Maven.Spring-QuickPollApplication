@@ -8,14 +8,16 @@ public class Poll {
 
     @Id
     @GeneratedValue
-    private Long id;
+    @Column(name = "POLL_ID")
+     Long id;
 
-    private String question;
+    @Column(name = "QUESTION")
+     String question;
 
     @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "POLL_ID")
+    @JoinColumn(name= "POLL_ID")
     @OrderBy
-    private Set<Option> options;
+    Set<Option> options;
 
     public Long getId() {
         return id;
