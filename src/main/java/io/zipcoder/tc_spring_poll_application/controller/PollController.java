@@ -5,11 +5,13 @@ import io.zipcoder.tc_spring_poll_application.domain.Poll;
 import io.zipcoder.tc_spring_poll_application.exception.ResourceNotFoundException;
 import io.zipcoder.tc_spring_poll_application.repository.PollRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 
 @RestController
@@ -23,7 +25,7 @@ public class PollController {
     }
 
     @RequestMapping(value = "/polls", method = RequestMethod.POST)
-    public ResponseEntity<?> createPoll(@RequestBody Poll poll) {
+    public ResponseEntity<?> createPoll(@RequestBody @Valid Poll poll) {
 
         poll = pollRepository.save(poll);
         URI newPollUri = ServletUriComponentsBuilder
@@ -53,7 +55,7 @@ public class PollController {
     }
 
     @RequestMapping(value = "/polls/{pollId}", method = RequestMethod.PUT)
-    public ResponseEntity<?> updatePoll(@RequestBody Poll poll, @PathVariable Long pollId) {
+    public ResponseEntity<?> updatePoll(@RequestBody @Valid Poll poll, @PathVariable Long pollId) {
         // Save the entity
         try{
         Poll p = pollRepository.save(poll);

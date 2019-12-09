@@ -1,5 +1,11 @@
 package io.zipcoder.tc_spring_poll_application.exception;
 
+import com.sun.corba.se.pept.transport.InboundConnectionCache;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public class ErrorDetail {
 
     String title;
@@ -7,6 +13,8 @@ public class ErrorDetail {
     String detail;
     Long timeStamp;
     String developerMessage;
+
+    Map<String, List<ValidationError>> errorMap = new HashMap<>();
 
     public ErrorDetail(){
 
@@ -58,5 +66,9 @@ public class ErrorDetail {
 
     public void setDeveloperMessage(String developerMessage) {
         this.developerMessage = developerMessage;
+    }
+
+    public Map<String, List<ValidationError>> getErrors() {
+        return errorMap;
     }
 }
