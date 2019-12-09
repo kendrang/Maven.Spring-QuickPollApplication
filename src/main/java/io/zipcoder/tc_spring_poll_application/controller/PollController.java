@@ -1,5 +1,6 @@
 package io.zipcoder.tc_spring_poll_application.controller;
 
+import com.sun.deploy.net.HttpResponse;
 import io.zipcoder.tc_spring_poll_application.domain.Poll;
 import io.zipcoder.tc_spring_poll_application.exception.ResourceNotFoundException;
 import io.zipcoder.tc_spring_poll_application.repository.PollRepository;
@@ -21,7 +22,7 @@ public class PollController {
         this.pollRepository = pollRepository;
     }
 
-    @RequestMapping(value="/polls", method=RequestMethod.POST)
+    @RequestMapping(value = "/polls", method = RequestMethod.POST)
     public ResponseEntity<?> createPoll(@RequestBody Poll poll) {
 
         poll = pollRepository.save(poll);
@@ -34,34 +35,46 @@ public class PollController {
         return new ResponseEntity<>(newPollUri, HttpStatus.CREATED);
     }
 
-    @RequestMapping(value="/polls", method= RequestMethod.GET)
+    @RequestMapping(value = "/polls", method = RequestMethod.GET)
     public ResponseEntity<Iterable<Poll>> getAllPolls() {
         Iterable<Poll> allPolls = pollRepository.findAll();
         return new ResponseEntity<>(allPolls, HttpStatus.OK);
 
     }
 
-    @RequestMapping(value="/polls/{pollId}", method=RequestMethod.GET)
+    @RequestMapping(value = "/polls/{pollId}", method = RequestMethod.GET)
     public ResponseEntity<?> getPoll(@PathVariable Long pollId) {
+        try{
         Poll p = pollRepository.findOne(pollId);
-        return new ResponseEntity<> (p, HttpStatus.OK);
+        return new ResponseEntity<>(p, HttpStatus.OK);
+        } catch (ResourceNotFoundException e){
+            return new ResponseEntity<HttpResponse>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @RequestMapping(value="/polls/{pollId}", method=RequestMethod.PUT)
+    @RequestMapping(value = "/polls/{pollId}", method = RequestMethod.PUT)
     public ResponseEntity<?> updatePoll(@RequestBody Poll poll, @PathVariable Long pollId) {
         // Save the entity
+        try{
         Poll p = pollRepository.save(poll);
         return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e){
+            return new ResponseEntity<HttpResponse>(HttpStatus.NOT_FOUND);
+        }
     }
 
-    @RequestMapping(value="/polls/{pollId}", method=RequestMethod.DELETE)
+    @RequestMapping(value = "/polls/{pollId}", method = RequestMethod.DELETE)
     public ResponseEntity<?> deletePoll(@PathVariable Long pollId) {
-        pollRepository.delete(pollId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        try {
+            pollRepository.delete(pollId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } catch (ResourceNotFoundException e) {
+            return new ResponseEntity<HttpResponse>(HttpStatus.NOT_FOUND);
+        }
     }
 
     public void verifyPoll(Long pollid) throws ResourceNotFoundException {
-        if(!pollRepository.exists(pollid)){
+        if (!pollRepository.exists(pollid)) {
             throw new ResourceNotFoundException();
         }
     }
