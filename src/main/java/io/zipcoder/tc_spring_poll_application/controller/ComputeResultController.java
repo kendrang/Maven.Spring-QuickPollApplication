@@ -1,5 +1,6 @@
-package dtos;
+package io.zipcoder.tc_spring_poll_application.controller;
 
+import dtos.VoteResult;
 import io.zipcoder.tc_spring_poll_application.domain.Vote;
 import io.zipcoder.tc_spring_poll_application.repository.VoteRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,6 @@ public class ComputeResultController {
         Iterable<Vote> allVotes = voteRepository.findVotesByPoll(pollId);
 
         //TODO: Implement algorithm to count votes
-        return new ResponseEntity<VoteResult>(voteResult, HttpStatus.OK);
+        return new ResponseEntity<>(voteResult, HttpStatus.OK);
     }
 }
